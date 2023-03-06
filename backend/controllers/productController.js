@@ -21,3 +21,21 @@ exports.getProducts = async(req, res, next) => {
         Products
     })
 }
+
+//Get single product details => /api/v1/:id
+
+exports.getSingleProduct = async(req, res, next)=>{
+    const product = await Product.findById(req.params.id);
+    
+    if(!product){
+        return res.status(404).json({
+            success: false,
+            message: 'product not Found'
+        })
+    }
+
+    res.status(200).json({
+        success:true,
+        product
+    })
+}

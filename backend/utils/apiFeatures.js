@@ -40,6 +40,7 @@ class APIFeatures {
         return this;
     }
 
+    //change to the pages numbers
     pagination(resPerPage){
         const currentPage =Number(this.queryStr.page) || 1;
         const skip = resPerPage * (currentPage - 1);

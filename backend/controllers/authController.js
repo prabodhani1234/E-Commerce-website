@@ -1,11 +1,11 @@
 const User = require('../models/user');
 
 const ErrorHandler = require('../utils/errorHandler');
-const catchAsyncError =require('../middleware/catchAsyncError');
+const catchAsyncErrors =require('../middleware/catchAsyncError');
 
 // Register a user => /api/v1/register
 
-exports.registerUser = catchAsyncError( async (req, res, next) =>{
+exports.registerUser = catchAsyncErrors( async (req, res, next) =>{
 
     const { name, email, password } = req.body;
 

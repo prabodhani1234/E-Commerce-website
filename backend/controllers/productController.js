@@ -2,15 +2,18 @@ const Product =require('../models/product')
 
 const ErrorHandler =require('../utils/errorHandler')
 
+const catchAsyncErrors = require('../middleware/catchAsyncError');
+
+
 //Create new Product => /api/v1/admin/product/new
-exports.newProduct = async(req, res, next) =>{
+exports.newProduct = catchAsyncErrors (async(req, res, next) =>{
     const product = await Product.create(req.body);
 
     res.status(201).json({
         success: true,
         product
     })
-}
+})
 
 // Get All Products => /api/v1/products
 exports.getProducts = async(req, res, next) => {

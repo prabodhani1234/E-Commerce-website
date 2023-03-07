@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
-    name:{
-        type : String,
+    name: {
+        type: String,
         required: [true, 'Please enter your name'],
-        maxLength: [30, 'Your Name Con Not exceed 30 Characters']
+        maxLength: [30, 'Your name cannot exceed 30 characters']
     },
     email: {
         type: String,
@@ -13,13 +13,13 @@ const userSchema = new mongoose.Schema({
         unique: true,
         validate: [validator.isEmail, 'Please enter valid email address']
     },
-    password:{
+    password: {
         type: String,
         required: [true, 'Please enter your password'],
-        minlength: [8, 'Your Password must be longer than 8 characters'],
+        minlength: [6, 'Your password must be longer than 6 characters'],
         select: false
     },
-    avatar:{
+    avatar: {
         public_id: {
             type: String,
             required: true
@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    resetpasswordToken: String,
+    resetPasswordToken: String,
     resetPasswordExpire: Date
 
 })

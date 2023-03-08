@@ -66,17 +66,19 @@ userSchema.methods.getJwtToken = function(){
     });
 }
 
-//Generate password reset token
-userSchema.method.getResetPasswordToken = function(){
-    //Generate token
+// Generate password reset token
+userSchema.methods.getResetPasswordToken = function () {
+    // Generate token
     const resetToken = crypto.randomBytes(20).toString('hex');
 
-    //has and set to resetPasswordToken
+    // Hash and set to resetPasswordToken
     this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex')
 
-    //set token expire time
+    // Set token expire time
     this.resetPasswordExpire = Date.now() + 30 * 60 * 1000
 
     return resetToken
+
 }
+
 module.exports =mongoose.model('User', userSchema)

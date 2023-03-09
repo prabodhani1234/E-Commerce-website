@@ -1,10 +1,11 @@
 
-
 const ErrorHandler = require('../utils/errorHandler');
 const User = require('../models/user');
 const catchAsyncErrors =require('../middleware/catchAsyncError');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
+
+const crypto = require('crypto');
 
 // Register a user => /api/v1/register
 
@@ -49,7 +50,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
         await sendEmail({
             email: user.email,
-            subject: 'ShopIT Password Recovery',
+            subject: 'E-Commerce Password Recovery',
             message
         })
 
@@ -69,6 +70,36 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
 })
 
+// ****Reset Password   =>  /api/v1/password/reset/:token
+exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
+
+    // Hash URL token
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() }
+    })
+
+    if (!user) {
+        return next(new ErrorHandler('Password reset token is invalid or has been expired', 400))
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHandler('Password does not match', 400))
+    }
+
+    // Setup new password
+    user.password = req.body.password;
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    sendToken(user, 200, res)
+
+})
 
 //Log in user => /api/v1/login
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {

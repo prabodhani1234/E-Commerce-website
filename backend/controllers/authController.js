@@ -128,6 +128,17 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
 })
 
+//Get Currently logged in user details =>
+exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
+
 // Logout user = /api/v1/logout
 exports.logout = catchAsyncErrors(async (req, res, next) => {
     res.cookie('token', null, {

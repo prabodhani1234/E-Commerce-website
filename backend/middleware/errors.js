@@ -35,6 +35,11 @@ module.exports=(err, req, res, next)=>{
             error = new ErrorHandler(message, 400)
         }
 
+        //Handling wrong JWT errors
+        if (err.name ==='JsonWebTokenError'){
+            const message = 'JSON Web Token is invalid. Try Again!!!'
+            error = new ErrorHandler(message, 400)
+        }
 
         res.status(error.statusCode).json({
             success:false,
